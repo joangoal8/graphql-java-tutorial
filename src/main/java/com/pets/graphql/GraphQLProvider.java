@@ -49,8 +49,6 @@ public class GraphQLProvider {
     return RuntimeWiring.newRuntimeWiring()
       .type(newTypeWiring("Query")
         .dataFetcher("ownerId", graphQLDataFetchers.getOwnerByIdDataFetcher()))
-      .type(newTypeWiring("Pet")
-        .dataFetcher("name", graphQLDataFetchers.getDogDataFetcher()))
       .build();
   }
 

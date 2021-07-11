@@ -1,5 +1,6 @@
 package com.pets.graphql;
 
+import com.google.common.collect.ImmutableList;
 import com.pets.model.Dog;
 import com.pets.model.DogBreed;
 import com.pets.model.PetOwner;
@@ -38,8 +39,15 @@ public class GraphQLDataFetchers {
     Dog boyeroBernaDog = Dog.builder().setId(uuidBoyero)
       .setAge(1).setName("Brandom").setDogBreed(boyeroBerna).build();
 
+    String uuidBorderCollie = "uuidDog8";
+    DogBreed borderCollie = DogBreed.builder().setName("Border Collie")
+      .setFeatures("Smart, energetic and loyal"). build();
+    Dog borderCollieDog = Dog.builder().setId(uuidBorderCollie)
+      .setAge(2).setName("Asce")
+      .setDogBreed(borderCollie).build();
+
     owners.add(PetOwner.builder().setId("ownerUuid1").setName("ownerName1")
-      .setDogs(Collections.singletonList(huskyDog)).build());
+      .setDogs(ImmutableList.of(huskyDog, borderCollieDog)).build());
 
     owners.add(PetOwner.builder().setId("ownerUuid2").setName("ownerName2")
       .setDogs(Collections.singletonList(malamuteDog)).build());
@@ -54,19 +62,6 @@ public class GraphQLDataFetchers {
       return owners
         .stream()
         .filter(owner -> owner.getId().equals(ownerId))
-        .findFirst()
-        .orElse(null);
-    };
-  }
-
-  public DataFetcher<Dog> getDogDataFetcher() {
-    return dataFetchingEnvironment -> {
-      Map<String, String> dogFetched = dataFetchingEnvironment.getSource();
-      String dogName = dogFetched.get("name");
-      return owners
-        .stream()
-        .flatMap(petOwner -> petOwner.getDogs().stream())
-        .filter(dog -> dog.getName().equals(dogName))
         .findFirst()
         .orElse(null);
     };
